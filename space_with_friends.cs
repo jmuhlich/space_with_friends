@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
 
-namespace space_with_friends
-{
+namespace space_with_friends {
 
-    [KSPAddon(KSPAddon.Startup.Flight, once: false)]
-    public class space_with_friends : MonoBehaviour
-    {
+    [KSPAddon( KSPAddon.Startup.Flight, once: false )]
+    public class space_with_friends : MonoBehaviour {
 
-        public void Start()
-        {
-            utils.Log("starting...");
+        public void Start() {
+            utils.Log( "starting..." );
 
-            if ( FlightGlobals.ActiveVessel == null )
-            {
-                utils.Log("  no active vessel, skipping");
+            if (FlightGlobals.ActiveVessel == null) {
+                utils.Log( "  no active vessel, skipping" );
                 return;
             }
 
@@ -34,8 +30,7 @@ namespace space_with_friends
 
         }
 
-        public void OnDestroy()
-        {
+        public void OnDestroy() {
         }
 
         /*
