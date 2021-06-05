@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 
 namespace server {
 	using System.Collections.Generic;
@@ -61,20 +62,27 @@ namespace server {
 			} );
 		}
 
-		void HandleMessage( object obj ) {
-			if (obj is msg.ClientLogin clientHello) {
+		void HandleMessage( object msg ) {
+
+			if (msg is msg.SendToAll sendToALl) {
+			}
+
+			if (msg is msg.SendToTarget sendToTarget) {
+			}
+
+			if (msg is msg.ClientLogin clientHello) {
 				Log( $"Got login from {clientHello.Name}" );
 				_clientName = clientHello.Name;
 				Send( $"Login ok, your name is now '{_clientName}'" );
 				return;
 			}
 
-			if (obj is msg.Person p) {
+			if (msg is msg.Person p) {
 				Log( $"Got a person: {p.Name} ({p.Friends.Count} friends)" );
 				return;
 			}
 
-			if (obj is List<msg.ISpell> spells) {
+			if (msg is List<msg.ISpell> spells) {
 				Log( $"We have received {spells.Count} spells:" );
 				foreach (var spell in spells)
 					Log( $"  {spell.GetType().Name}: {spell.Cast()}" );
@@ -84,10 +92,10 @@ namespace server {
 
 			// If we have no clue how to handle something, we
 			// just print it out to the console
-			Log( $"Received a '{obj.GetType().Name}': {obj}" );
+			Log( $"Received a '{msg.GetType().Name}': {msg}" );
 		}
 
-		void Log( string text ) => log.info( "[Server] " + text );
+		void Log( string text ) => log.info( text );
 
 		void Send( object obj ) => _sendCeras.WriteToStream( _netStream, obj );
 	}
@@ -95,6 +103,8 @@ namespace server {
 
 	static class Server {
 		public static int port = 7887;
+
+		public static Immutable
 
 		public static void Start() {
 			log.info( "Starting thread." );
@@ -110,7 +120,7 @@ namespace server {
 			while (true) {
 				var tcpClient = listener.AcceptTcpClient();
 				log.info( $"Got a client!" );
-				log.logProps(tcpClient, "   ");
+				log.logProps( tcpClient, "   " );
 
 				var serverClientHandler = new ServerClient( tcpClient );
 			}

@@ -4,16 +4,16 @@ using System;
 namespace msg {
 
 
-	public class SendToAll<T> {
+	public class SendToAll {
 
-		public T Message;
+		public object Message;
 
 	}
 
-	public class SendToTarget<T> {
+	public class SendToTarget {
 
 		public string Target;
-		public T Message;
+		public object Message;
 
 	}
 
