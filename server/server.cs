@@ -104,7 +104,7 @@ namespace server {
 	static class Server {
 		public static int port = 7887;
 
-		public static Immutable
+		//public static ImmutableList
 
 		public static void Start() {
 			log.info( "Starting thread." );
@@ -123,6 +123,8 @@ namespace server {
 				log.logProps( tcpClient, "   " );
 
 				var serverClientHandler = new ServerClient( tcpClient );
+
+
 			}
 		}
 

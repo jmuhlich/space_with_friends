@@ -51,11 +51,11 @@
 		}
 
 		void SendToAll<T>( T msg ) {
-			SendRaw( new msg.SendToAll<T> { Message = msg } );
+			SendRaw( new msg.SendToAll { Message = msg } );
 		}
 
 		void SendToTarget<T>( string target, T msg ) {
-			SendRaw( new msg.SendToTarget<T> { Target = target, Message = msg } );
+			SendRaw( new msg.SendToTarget { Target = target, Message = msg } );
 		}
 
 
