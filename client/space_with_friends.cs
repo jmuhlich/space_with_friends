@@ -12,38 +12,9 @@ namespace space_with_friends {
 				utils.Log( "  no active vessel, skipping" );
 				return;
 			}
-
-			/*
-			var controls = FindObjectsOfType<UI_Control>();
-			foreach (var module in FlightGlobals.ActiveVessel.vesselModules )
-			{
-				Log("    module: " + module.name);
-
-				foreach(var field in module.Fields)
-				{
-					Log("     field: " + field.name);
-					field.OnValueModified += onValueModified;
-					field.uiControlFlight.onFieldChanged = onFieldChanged;
-				}
-			}
-			*/
-
 		}
 
 		public void OnDestroy() {
 		}
-
-		/*
-		public void onFieldChanged(BaseField field, object value)
-		{
-			Log("onFieldChanged: " + field.name + ": " + value);
-		}
-
-		public void onValueModified(object value)
-		{
-			Log("onValueModified: " + value.ToString());
-		}
-		*/
-
 	}
 }

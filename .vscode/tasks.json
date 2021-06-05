@@ -2,37 +2,41 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "build",
+			"label": "client:build",
 			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"build",
-				"${workspaceFolder}/space_with_friends.csproj",
+				"${workspaceFolder}/client/space_with_friends.csproj",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
-			"problemMatcher": "$msCompile"
+			"problemMatcher": "$msCompile",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		},
 		{
-			"label": "publish",
+			"label": "client:publish",
 			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"publish",
-				"${workspaceFolder}/space_with_friends.csproj",
+				"${workspaceFolder}/client/space_with_friends.csproj",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
 			"problemMatcher": "$msCompile"
 		},
 		{
-			"label": "watch",
+			"label": "client:watch",
 			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"watch",
 				"run",
-				"${workspaceFolder}/space_with_friends.csproj",
+				"${workspaceFolder}/client/space_with_friends.csproj",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
