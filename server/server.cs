@@ -1,4 +1,5 @@
 ﻿using System;
+//using System.Collections.Immutable; // doesn't exist for me? - andy
 
 namespace space_with_friends
 {
@@ -62,24 +63,29 @@ namespace space_with_friends
 			} );
 		}
 
-		void HandleMessage(object obj)
+		void HandleMessage(object msg)
 		{
-			if (obj is msg.login login)
+			if (msg is msg.login login)
 			{
 				Log($"login: {login.player_id}");
 				return;
 			}
 
-			if (obj is msg.logout logout) {
+			if (msg is msg.logout logout) {
 				Log( $"logout: {logout.player_id}" );
-				return;
-			}
+
+			// if (msg is msg.SendToAll sendToALl) {
+			// }
+
+			// if (msg is msg.SendToTarget sendToTarget) {
+			// }
+
 			// If we have no clue how to handle something, we
 			// just print it out to the console
-			Log( $"RECEIVED UNHANDLED: '{obj.GetType().Name}': {obj}" );
+			Log( $"RECEIVED UNHANDLED: '{msg.GetType().Name}': {msg}" );
 		}
 
-		void Log( string text ) => log.info( "[Server] " + text );
+		void Log( string text ) => log.info( text );
 
 		void Send( object obj ) => _sendCeras.WriteToStream( _netStream, obj );
 	}
@@ -87,6 +93,8 @@ namespace space_with_friends
 
 	static class Server {
 		public static int port = 7887;
+
+		//public static ImmutableList
 
 		public static void Start() {
 			log.info( "Starting thread." );
@@ -102,9 +110,11 @@ namespace space_with_friends
 			while (true) {
 				var tcpClient = listener.AcceptTcpClient();
 				log.info( $"Got a client!" );
-				log.logProps(tcpClient, "   ");
+				log.logProps( tcpClient, "   " );
 
 				var serverClientHandler = new ServerClient( tcpClient );
+
+
 			}
 		}
 
