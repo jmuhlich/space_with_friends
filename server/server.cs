@@ -63,6 +63,17 @@ namespace space_with_friends
 			} );
 		}
 
+		void HandleMessage( object msg ) {
+
+			if (msg is msg.SendToAll sendToALl) {
+				return;
+			}
+
+			if (msg is msg.SendToTarget sendToTarget) {
+				return;
+			}
+
+			log.warn( $"Got a message of type {msg.GetType()} that we did not handle" );
 		void HandleMessage(object msg)
 		{
 			if (msg is msg.login login)
@@ -94,7 +105,7 @@ namespace space_with_friends
 	static class Server {
 		public static int port = 7887;
 
-		//public static ImmutableList
+		public static ImmutableList<ServerClient> s_client = ImmutableList<ServerClient>.Empty;
 
 		public static void Start() {
 			log.info( "Starting thread." );
