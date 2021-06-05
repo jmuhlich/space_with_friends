@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace server
-{
+namespace server {
 	using System.Collections.Generic;
 	using Ceras;
 	using Ceras.Helpers;
@@ -10,8 +9,7 @@ namespace server
 	using System.Threading;
 	using System.Threading.Tasks;
 
-	class ServerClient
-	{
+	class ServerClient {
 		readonly TcpClient _tcpClient;
 		readonly NetworkStream _netStream;
 		readonly CerasSerializer _sendCeras;
@@ -20,8 +18,7 @@ namespace server
 		string _clientName;
 
 
-		public ServerClient(TcpClient tcpClient)
-		{
+		public ServerClient( TcpClient tcpClient ) {
 			_tcpClient = tcpClient;
 			_netStream = tcpClient.GetStream();
 
@@ -30,91 +27,85 @@ namespace server
 			// the type should (from then on) be known as a some ID.
 			var configSend = new SerializerConfig();
 			configSend.Advanced.PersistTypeCache = true;
-			
+
 			_sendCeras = new CerasSerializer( configSend );
 
 			var configRecv = new SerializerConfig();
 			configRecv.Advanced.PersistTypeCache = true;
 
-			_receiveCeras = new CerasSerializer(configRecv);
+			_receiveCeras = new CerasSerializer( configRecv );
 
 			StartReceivingMessages();
 		}
 
-		void StartReceivingMessages()
-		{
-			Task.Run(async () =>
-			{
-				try
-				{
+		void StartReceivingMessages() {
+			Task.Run( async () => {
+				try {
 					// Keep receiving packets from the client and respond to them
 					// Eventually when the client disconnects we'll just get an exception and end the thread...
-					while (true)
-					{
-						var obj = await _receiveCeras.ReadFromStream(_netStream);
-						HandleMessage(obj);
+					while (true) {
+						var obj = await _receiveCeras.ReadFromStream( _netStream );
+						HandleMessage( obj );
 					}
 				}
-				catch (Exception e)
-				{
-					Log($"Error while handling client '{_tcpClient.Client.RemoteEndPoint}': {e}");
+				catch (Exception e) {
+					Log( $"Error while handling client '{_tcpClient.Client.RemoteEndPoint}': {e}" );
 				}
-			});
+			} );
 		}
 
-		void HandleMessage(object obj)
-		{
-			if (obj is msg.ClientLogin clientHello)
-			{
-				Log($"Got login from {clientHello.Name}");
+		void HandleMessage( object obj ) {
+			if (obj is msg.ClientLogin clientHello) {
+				Log( $"Got login from {clientHello.Name}" );
 				_clientName = clientHello.Name;
-				Send($"Login ok, your name is now '{_clientName}'");
+				Send( $"Login ok, your name is now '{_clientName}'" );
 				return;
 			}
 
-			if (obj is msg.Person p)
-			{
-				Log($"Got a person: {p.Name} ({p.Friends.Count} friends)");
+			if (obj is msg.Person p) {
+				Log( $"Got a person: {p.Name} ({p.Friends.Count} friends)" );
 				return;
 			}
 
-			if (obj is List<msg.ISpell> spells)
-			{
-				Log($"We have received {spells.Count} spells:");
+			if (obj is List<msg.ISpell> spells) {
+				Log( $"We have received {spells.Count} spells:" );
 				foreach (var spell in spells)
-					Log($"  {spell.GetType().Name}: {spell.Cast()}");
-				
+					Log( $"  {spell.GetType().Name}: {spell.Cast()}" );
+
 				return;
 			}
 
 			// If we have no clue how to handle something, we
 			// just print it out to the console
-			Log($"Received a '{obj.GetType().Name}': {obj}");
+			Log( $"Received a '{obj.GetType().Name}': {obj}" );
 		}
 
-		void Log(string text) => Console.WriteLine("[Server] " + text);
+		void Log( string text ) => log.info( "[Server] " + text );
 
-		void Send(object obj) => _sendCeras.WriteToStream(_netStream, obj);
+		void Send( object obj ) => _sendCeras.WriteToStream( _netStream, obj );
 	}
 
 
-	static class Server
-	{
-		public static void Start()
-		{
-			new Thread(AcceptClients).Start();
+	static class Server {
+		public static int port = 7887;
+
+		public static void Start() {
+			log.info( "Starting thread." );
+			new Thread( AcceptClients ).Start();
 		}
 
-		static void AcceptClients()
-		{
-			var listener = new TcpListener(IPAddress.Any, 43210);
+		static void AcceptClients() {
+			log.info( $"Starting listener on {port}" );
+			var listener = new TcpListener( IPAddress.Any, port );
 			listener.Start();
 
-			while (true)
-			{
+			log.info( $"Looping waiting for clients" );
+			while (true) {
 				var tcpClient = listener.AcceptTcpClient();
+				log.info( $"Got a client!" );
+				log.logProps(tcpClient, "   ");
 
-				var serverClientHandler = new ServerClient(tcpClient);
+				var serverClientHandler = new ServerClient( tcpClient );
 			}
 		}
 
