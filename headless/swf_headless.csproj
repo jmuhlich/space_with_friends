@@ -24,6 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\libs\Ceras\Ceras.csproj" />
     <ProjectReference Include="..\common\swf_common.csproj" />
 
