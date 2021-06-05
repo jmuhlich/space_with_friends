@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace server
+namespace space_with_friends
 {
 	using System.Collections.Generic;
 	using Ceras;
@@ -18,7 +18,6 @@ namespace server
 		readonly CerasSerializer _receiveCeras;
 
 		string _clientName;
-
 
 		public ServerClient(TcpClient tcpClient)
 		{
@@ -64,9 +63,9 @@ namespace server
 
 		void HandleMessage(object obj)
 		{
-			if (obj is msg.ClientLogin clientHello)
+			if (obj is msg.login login)
 			{
-				Log($"Got login from {clientHello.Name}");
+				Log($"login: {login.player_id}");
 				_clientName = clientHello.Name;
 				Send($"Login ok, your name is now '{_clientName}'");
 				return;

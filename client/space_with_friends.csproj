@@ -23,6 +23,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\libs\Ceras\Ceras.csproj" />
+    <ProjectReference Include="..\common\swf_common.csproj" />
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>

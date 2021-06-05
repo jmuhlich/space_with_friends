@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LmpCommon.Locks
+namespace space_with_friends
 {
     public class Lock : IEquatable<Lock>, ICloneable
     {

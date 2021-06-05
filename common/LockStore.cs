@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace LmpCommon.Locks
+namespace space_with_friends
 {
     /// <summary>
     /// This class serves to store all the defined locks
