@@ -1,5 +1,4 @@
-﻿namespace Ceras
-{
+﻿namespace Ceras {
 	using Ceras.Formatters;
 	using Resolvers;
 	using System;
@@ -22,17 +21,17 @@
 	/// You shouldn't share a single instance of a SerializerConfig either
 	/// </para>
 	/// </summary>
-	public class SerializerConfig : IAdvancedConfig, ISizeLimitsConfig, IVersionToleranceConfig, IWarningConfig
-	{
+	public class SerializerConfig : IAdvancedConfig, ISizeLimitsConfig, IVersionToleranceConfig, IWarningConfig {
 		bool _isSealed; // todo
 		internal bool IsSealed => _isSealed;
 		internal void Seal() => _isSealed = true;
 
 		CerasSerializer _claimedBy;
-		internal bool Claim(CerasSerializer ceras)
-		{
-			if(_claimedBy != null)
-				return false;
+		internal bool Claim( CerasSerializer ceras ) {
+			if (_claimedBy != null) {
+				var refEq = object.ReferenceEquals( _claimedBy, ceras );
+				return refEq;
+			}
 			_claimedBy = ceras;
 			return true;
 		}
@@ -114,11 +113,9 @@
 		public IVersionToleranceConfig VersionTolerance => this;
 
 		VersionToleranceMode _versionToleranceMode = VersionToleranceMode.Disabled;
-		VersionToleranceMode IVersionToleranceConfig.Mode
-		{
+		VersionToleranceMode IVersionToleranceConfig.Mode {
 			get => _versionToleranceMode;
-			set
-			{
+			set {
 				if (_versionToleranceMode == VersionToleranceMode.Disabled && value != VersionToleranceMode.Disabled)
 					Advanced.UseReinterpretFormatter = false;
 				_versionToleranceMode = value;
@@ -135,46 +132,44 @@
 		Dictionary<Type, TypeConfig> _staticConfigEntries = new Dictionary<Type, TypeConfig>();
 
 		// Get a TypeConfig without calling 'OnConfigNewType'
-		TypeConfig GetTypeConfigForConfiguration(Type type, bool isStatic = false)
-		{
+		TypeConfig GetTypeConfigForConfiguration( Type type, bool isStatic = false ) {
 			var configDict = isStatic ? _staticConfigEntries : _configEntries;
-			if (configDict.TryGetValue(type, out var typeConfig))
+			if (configDict.TryGetValue( type, out var typeConfig ))
 				return typeConfig;
 
 			if (type.ContainsGenericParameters)
-				throw new InvalidOperationException("You can not configure 'open' types (like List<>)! Only 'closed' types (like 'List<int>') can be configured statically. For dynamic configuration (which is what you are trying to do) use the 'OnConfigNewType' callback. It will be called for every fully instantiated type.");
+				throw new InvalidOperationException( "You can not configure 'open' types (like List<>)! Only 'closed' types (like 'List<int>') can be configured statically. For dynamic configuration (which is what you are trying to do) use the 'OnConfigNewType' callback. It will be called for every fully instantiated type." );
 
-			typeConfig = (TypeConfig)Activator.CreateInstance(typeof(TypeConfig<>).MakeGenericType(type),
+			typeConfig = (TypeConfig)Activator.CreateInstance( typeof( TypeConfig<> ).MakeGenericType( type ),
 															   System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
 															   null,
 															   new object[] { this, isStatic },
-															   null);
-			configDict.Add(type, typeConfig);
+															   null );
+			configDict.Add( type, typeConfig );
 
 			return typeConfig;
 		}
 
 		// Get a TypeConfig for usage, meaning if by now the type has not been configured then
 		// use 'OnConfigNewType' as a last chance (or if no callback is set just use the defaults)
-		internal TypeConfig GetTypeConfig(Type type, bool isStatic)
-		{
+		internal TypeConfig GetTypeConfig( Type type, bool isStatic ) {
 			var configDict = isStatic ? _staticConfigEntries : _configEntries;
-			if (configDict.TryGetValue(type, out var typeConfig))
+			if (configDict.TryGetValue( type, out var typeConfig ))
 				return typeConfig;
 
 			if (type.ContainsGenericParameters)
 				return null;
 
-			typeConfig = (TypeConfig)Activator.CreateInstance(typeof(TypeConfig<>).MakeGenericType(type),
+			typeConfig = (TypeConfig)Activator.CreateInstance( typeof( TypeConfig<> ).MakeGenericType( type ),
 															  System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
 															  null,
 															  new object[] { this, isStatic },
-															  null);
+															  null );
 
 			// Let the user handle it
-			OnConfigNewType?.Invoke((TypeConfig)typeConfig);
+			OnConfigNewType?.Invoke( (TypeConfig)typeConfig );
 
-			configDict.Add(type, typeConfig);
+			configDict.Add( type, typeConfig );
 			return typeConfig;
 		}
 
@@ -186,17 +181,17 @@
 		/// This overload should only be used if you actually don't know the type in advance (for example when dealing with a private type in another assembly)
 		/// </para>
 		/// </summary>
-		public TypeConfig ConfigType(Type type) => GetTypeConfigForConfiguration(type);
+		public TypeConfig ConfigType( Type type ) => GetTypeConfigForConfiguration( type );
 
 		/// <summary>
 		/// Configure a static type (or the static part of a type that is not static but has some static members)
 		/// </summary>
-		public TypeConfig ConfigStaticType(Type type) => GetTypeConfigForConfiguration(type, true);
+		public TypeConfig ConfigStaticType( Type type ) => GetTypeConfigForConfiguration( type, true );
 
 		/// <summary>
 		/// Use this when you want to configure types directly (instead of through attributes, or <see cref="OnConfigNewType"/>). Any changes you make using this method will override any settings applied through attributes on the type.
 		/// </summary>
-		public TypeConfig<T> ConfigType<T>() => (TypeConfig<T>)GetTypeConfigForConfiguration(typeof(T));
+		public TypeConfig<T> ConfigType<T>() => (TypeConfig<T>)GetTypeConfigForConfiguration( typeof( T ) );
 
 
 		/// <summary>
@@ -206,21 +201,19 @@
 		/// That means it will not get called for any type that you have already configured using <see cref="ConfigType{T}"/>!
 		/// </para>
 		/// </summary>
-		public Action<TypeConfig> OnConfigNewType
-		{
+		public Action<TypeConfig> OnConfigNewType {
 			get => _onConfigNewType;
-			set
-			{
+			set {
 				if (_onConfigNewType == null)
 					_onConfigNewType = value;
 				else
-					throw new InvalidOperationException(nameof(OnConfigNewType) + " is already set. Multiple type configuration callbacks would overwrite each others changes, you must collect all the callbacks into one function to maintain detailed control over how each Type gets configured.");
+					throw new InvalidOperationException( nameof( OnConfigNewType ) + " is already set. Multiple type configuration callbacks would overwrite each others changes, you must collect all the callbacks into one function to maintain detailed control over how each Type gets configured." );
 			}
 		}
 		Action<TypeConfig> _onConfigNewType;
 
 		#endregion
-		
+
 		#region Advanced
 
 		/// <summary>
@@ -249,7 +242,7 @@
 		IEqualityComparer<object> IAdvancedConfig.ObjectCacheComparer { get; set; }
 
 		#endregion
-		
+
 		#region Warnings
 
 		/// <summary>
@@ -265,8 +258,7 @@
 	}
 
 
-	public interface IAdvancedConfig
-	{
+	public interface IAdvancedConfig {
 		/// <summary>
 		/// Set this to a function you provide. Ceras will call it when an object instance is no longer needed.
 		/// For example you want to populate an existing object with data, and one of the fields already has a value (a left-over from the last time it was used),
@@ -388,8 +380,7 @@
 		IEqualityComparer<object> ObjectCacheComparer { get; set; }
 	}
 
-	public interface ISizeLimitsConfig
-	{
+	public interface ISizeLimitsConfig {
 		/// <summary>
 		/// Maximum string length
 		/// </summary>
@@ -408,8 +399,7 @@
 		uint MaxCollectionSize { get; set; }
 	}
 
-	public interface IVersionToleranceConfig
-	{
+	public interface IVersionToleranceConfig {
 		/// <summary>
 		/// Checkout the documentation for <see cref="VersionToleranceMode.Standard"/>
 		/// <para>Default: <see cref="VersionToleranceMode.Disabled"/></para>
@@ -434,8 +424,7 @@
 		*/
 	}
 
-	public interface IWarningConfig
-	{
+	public interface IWarningConfig {
 		/// <summary>
 		/// When enabled, will throw an exception when the serializer is running with <see cref="AotMode.Enabled"/> and is about to create an instance of <see cref="DynamicFormatter"/>
 		/// <para>Default: true</para>
@@ -450,8 +439,7 @@
 
 
 	[Flags]
-	public enum DelegateSerializationFlags
-	{
+	public enum DelegateSerializationFlags {
 		/// <summary>
 		/// Throw an exception when trying to serialize a delegate type
 		/// </summary>
@@ -470,8 +458,7 @@
 	/// <summary>
 	/// Options how Ceras handles readonly fields. Check the description of each entry.
 	/// </summary>
-	public enum ReadonlyFieldHandling
-	{
+	public enum ReadonlyFieldHandling {
 		/// <summary>
 		/// This is the default, Ceras will not serialize/deserialize readonly fields.
 		/// </summary>
@@ -495,8 +482,7 @@
 	}
 
 	[Flags]
-	public enum VersionToleranceMode
-	{
+	public enum VersionToleranceMode {
 		/// <summary>
 		/// No version tolerance, any name or type change in any serialized type changes will be a breaking change
 		/// </summary>
@@ -535,18 +521,16 @@
 		Extended = 2,
 	}
 
-	public delegate IFormatter FormatterResolverCallback(CerasSerializer ceras, Type typeToBeFormatted);
+	public delegate IFormatter FormatterResolverCallback( CerasSerializer ceras, Type typeToBeFormatted );
 
-	public enum BitmapMode
-	{
+	public enum BitmapMode {
 		DontSerializeBitmaps = 0,
 		SaveAsBmp = 1,
 		SaveAsPng = 2,
 		SaveAsJpg = 3,
 	}
 
-	public enum AotMode
-	{
+	public enum AotMode {
 		/// <summary>
 		/// The default mode, don't do anything special for compatibility with AoT runtimes
 		/// </summary>
