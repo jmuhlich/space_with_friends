@@ -8,7 +8,6 @@ namespace space_with_friends {
 		public void Start() {
 			utils.Log( "starting..." );
 
-			G
 			if (FlightGlobals.ActiveVessel == null) {
 				utils.Log( "  no active vessel, skipping" );
 				return;
