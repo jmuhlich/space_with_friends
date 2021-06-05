@@ -1,21 +1,51 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace msg
-{
+namespace msg {
+
+
+	public class SendToAll<T> {
+
+		public T Message;
+
+	}
+
+	public class SendToTarget<T> {
+
+		public string Target;
+		public T Message;
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// D E B U G 
+	// T E S T I N G
+
 	// This is like a login packet
 	// Why do we have it? Just to show the most simple case
-	public class ClientLogin
-	{
+	public class ClientLogin {
 		public string Name;
 		public string Password;
 	}
-	
+
 
 	// More complicated classes are possible as well
 	// Like 'Person' which has references to other persons)
-	public class Person
-	{
+	public class Person {
 		public string Name;
 		public int Age;
 		public List<Person> Friends = new List<Person>();
@@ -24,41 +54,35 @@ namespace msg
 
 	// Abstract classes and interfaces are very rarely handled
 	// correctly with other serializers
-	public interface ISpell
-	{
+	public interface ISpell {
 		string Cast();
 	}
 
 	// A fireball that just deals some direct damage
-	public class Fireball : ISpell
-	{
+	public class Fireball : ISpell {
 		public int DamageMin = 40;
 		public int DamageMax = 60;
 
-		public string Cast()
-		{
-			var dmg = new Random().Next(DamageMin, DamageMax);
+		public string Cast() {
+			var dmg = new Random().Next( DamageMin, DamageMax );
 			return $"Fireball dealt {dmg} damage!";
 		}
 	}
 
 	// Chain-lightning that jumps over many targets (losing damage with every jump)
-	public class Lightning : ISpell
-	{
+	public class Lightning : ISpell {
 		public int InitialDamage = 120;
 		public float DamageFactorPerJump = 0.8f;
 		public int MaxTargets = 6;
 
-		public string Cast()
-		{
+		public string Cast() {
 			var rng = new Random();
 
-			var numberOfTargets = rng.Next(MaxTargets/2, MaxTargets);
+			var numberOfTargets = rng.Next( MaxTargets / 2, MaxTargets );
 
 			float totalDamage = 0;
 			float currentDamage = InitialDamage;
-			for (int i = 0; i < numberOfTargets; i++)
-			{
+			for (int i = 0; i < numberOfTargets; i++) {
 				totalDamage += currentDamage;
 				currentDamage *= DamageFactorPerJump;
 			}

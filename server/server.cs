@@ -20,6 +20,13 @@ namespace server {
 
 		public ServerClient( TcpClient tcpClient ) {
 			_tcpClient = tcpClient;
+
+			var lo = new LingerOption( false, 0 );
+			_tcpClient.LingerState = lo;
+
+			_tcpClient.NoDelay = true;
+
+
 			_netStream = tcpClient.GetStream();
 
 			// We want to keep "learned" types

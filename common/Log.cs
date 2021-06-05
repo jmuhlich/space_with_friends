@@ -268,6 +268,19 @@ static public override void WriteLine( string msg ) {
 			}
 		}
 		catch (Exception ex) {
+			Console.WriteLine( "EXCEPTION DURING LOGGING" );
+			Console.WriteLine( "EXCEPTION DURING LOGGING" );
+			Console.WriteLine( "EXCEPTION DURING LOGGING" );
+			Console.WriteLine( "EXCEPTION DURING LOGGING" );
+			Console.WriteLine( "EXCEPTION DURING LOGGING" );
+			Console.WriteLine( $"Exception {ex}" );
+
+			Debug.WriteLine( "EXCEPTION DURING LOGGING" );
+			Debug.WriteLine( "EXCEPTION DURING LOGGING" );
+			Debug.WriteLine( "EXCEPTION DURING LOGGING" );
+			Debug.WriteLine( "EXCEPTION DURING LOGGING" );
+			Debug.WriteLine( "EXCEPTION DURING LOGGING" );
+			Debug.WriteLine( $"Exception {ex}" );
 		}
 	}
 
