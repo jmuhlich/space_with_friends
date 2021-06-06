@@ -18,6 +18,8 @@ namespace swf_common {
 		CerasSerializer _sendCeras;
 		CerasSerializer _receiveCeras;
 
+		public event Action<object> on_message;
+
 		public void connect( string host, UInt16 port ) {
 			// Create network connection	
 			_client = new TcpClient();
@@ -84,26 +86,10 @@ namespace swf_common {
 		}
 
 		public virtual void HandleMessage( object msg ) {
+			on_message.Invoke( msg );
 		}
 
 		// A little helper function that sends any object to the server
 		protected void sendRaw( object msg ) => _sendCeras.WriteToStream( _netStream, msg );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 }

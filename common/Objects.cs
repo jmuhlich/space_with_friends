@@ -12,7 +12,10 @@ namespace space_with_friends.msg {
         public string player_id;
     }
 
-
+	public class rpm_event {
+		public string player_id;
+		public string event_json;
+	}
 
 
 

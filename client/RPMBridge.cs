@@ -1,40 +1,52 @@
-﻿namespace space_with_friends {
+﻿using Newtonsoft.Json;
+
+namespace space_with_friends {
 
 	[KSPAddon( KSPAddon.Startup.Flight, once: false )]
 	public class RPMBridge {
 		public void Start() {
 			JSI.Core.Events.onEvent += on_event;
+			Core.client.on_message += on_network_message;
 		}
 
 		public void OnDestroy() {
+			Core.client.on_message -= on_network_message;
 			JSI.Core.Events.onEvent -= on_event;
 		}
 
 		public static void on_event( JSI.Core.Event _event ) {
-			if (!(_event.name.StartsWith( "click:" ) || _event.name.StartsWith( "release:" ))) {
-				return;
+			switch( _event.type ) {
+				case "click":
+				case "release":
+					Core.client.broadcast<msg.rpm_event>( new msg.rpm_event {
+						player_id = space_with_friends.Core.player_id,
+						event_json = JsonConvert.SerializeObject( _event )
+					} );
+					break;
 			}
-
-			utils.Log( "sending: " + _event.name );
 		}
 
-		void on_network_message( byte[] data ) {
-			string message;
-			try {
-				message = System.Text.Encoding.ASCII.GetString( data );
-			}
-			catch (System.Exception ex) {
-				UnityEngine.Debug.LogError( ex.StackTrace );
-				return;
-			}
+		void on_network_message( object msg ) {
+			if ( msg is msg.rpm_event rpm_event ) {
+				try {
+					JSI.Core.Event _event = JsonConvert.DeserializeObject<JSI.Core.Event>( rpm_event.event_json );
 
-			if (!(message.StartsWith( "click:" ) || message.StartsWith( "release:" ))) {
-				return;
+					switch( _event.type ) {
+						case "click":
+						case "release":
+							break;
+						default:
+							return;
+					}
+
+					utils.Log( $"replay: {rpm_event.player_id}: { _event.type } { _event.vessel_id.ToString() } { ( (JSI.Core.EventData)_event.data ).propID } { ( (JSI.Core.EventData)_event.data ).buttonName }" );
+					JSI.SmarterButton.Replay( _event );
+				}
+				catch (System.Exception ex) {
+					UnityEngine.Debug.LogError( ex.StackTrace );
+					return;
+				}
 			}
-
-			utils.Log( "replaying: " + message );
-
-			JSI.SmarterButton.Replay( message );
 		}
 	}
 }

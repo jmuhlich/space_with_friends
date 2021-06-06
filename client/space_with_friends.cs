@@ -5,7 +5,7 @@ using UnityEngine;
 namespace space_with_friends {
 
 	[KSPAddon( KSPAddon.Startup.FlightEditorAndKSC, once: true )]
-	public class space_with_friends_main : MonoBehaviour {
+	public class Core : MonoBehaviour {
 
 		public static space_with_friends.Client client;
 		public static string player_id;
@@ -13,7 +13,7 @@ namespace space_with_friends {
 		public void Start() {
 			utils.Log( "starting" );
 
-			if ( space_with_friends_settings.instance.host != null ) {
+			if ( space_with_friends_settings.instance.host != "" ) {
 				if ( client != null ) {
 					return;
 				}
@@ -27,7 +27,7 @@ namespace space_with_friends {
 				// default to the device id
 				player_id = SystemInfo.deviceUniqueIdentifier;
 
-				string player_id_file = Path.GetFullPath( Path.Combine( KSPUtil.ApplicationRootPath, "space_with_friends_player_id" ) );
+				string player_id_file = Path.GetFullPath( Path.Combine( KSPUtil.ApplicationRootPath, "space_with_friends_player_id.txt" ) );
 				if ( File.Exists( player_id_file ) ) {
 					List<string> lines = (List<string>)File.ReadLines( player_id_file );
 					if ( lines.Count > 0 ) {

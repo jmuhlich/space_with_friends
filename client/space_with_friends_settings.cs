@@ -7,7 +7,7 @@ using KSP;
 namespace space_with_friends {
 	[KSPScenario( ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.EDITOR, GameScenes.FLIGHT )]
 	public class space_with_friends_settings : ScenarioModule {
-		public string host = "localhost";
+		public string host = "";
 		public UInt16 port = 7887;
 
 		public static space_with_friends_settings instance;
