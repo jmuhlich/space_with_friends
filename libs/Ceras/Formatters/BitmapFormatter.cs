@@ -1,4 +1,8 @@
-﻿using System;
+﻿#if NOT_UNITY
+
+
+using System;
+
 
 namespace Ceras.Formatters
 {
@@ -131,3 +135,6 @@ namespace Ceras.Formatters
 
 #endif
 }
+
+
+#endif

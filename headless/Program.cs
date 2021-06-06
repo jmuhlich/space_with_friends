@@ -7,11 +7,14 @@ namespace client {
 			log.create( "logs/headless.log" );
 
 			log.info( "Create a new client" );
-			var c = new Client();
-			c.Start();
+			var client = new headless.Client();
+
+			client.connect("localhost", 7887);
+
+			//c.Start();
 
 			while (true) {
-				c.SendExampleObjects();
+				client.sendExampleObjects();
 				Thread.Sleep(250);
 			}
 		}

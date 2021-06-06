@@ -1,8 +1,7 @@
 ﻿using System;
 //using System.Collections.Immutable; // doesn't exist for me? - andy
 
-namespace space_with_friends
-{
+namespace space_with_friends {
 	using System.Collections.Generic;
 	using Ceras;
 	using Ceras.Helpers;
@@ -19,8 +18,7 @@ namespace space_with_friends
 
 		string _clientName;
 
-		public ServerClient(TcpClient tcpClient)
-		{
+		public ServerClient( TcpClient tcpClient ) {
 			_tcpClient = tcpClient;
 
 			var lo = new LingerOption( false, 0 );
@@ -58,54 +56,52 @@ namespace space_with_friends
 					}
 				}
 				catch (Exception e) {
-					Log( $"Error while handling client '{_tcpClient.Client.RemoteEndPoint}': {e}" );
+					log.info( $"Error while handling client '{_tcpClient.Client.RemoteEndPoint}': {e}" );
 				}
 			} );
 		}
 
 		void HandleMessage( object msg ) {
+			log.debug( $"Got: {msg.GetType()}" );
 
 			if (msg is msg.SendToAll sendToALl) {
+				log.trace( $"Bouncing: {sendToALl.Message.GetType()}" );
 				return;
 			}
 
 			if (msg is msg.SendToTarget sendToTarget) {
+				log.trace( $"Bouncing: {sendToTarget.Message.GetType()}" );
 				return;
 			}
 
-			log.warn( $"Got a message of type {msg.GetType()} that we did not handle" );
-		void HandleMessage(object msg)
-		{
-			if (msg is msg.login login)
-			{
-				Log($"login: {login.player_id}");
+			if (msg is msg.login login) {
+				log.info( $"login: {login.player_id}" );
 				return;
 			}
 
 			if (msg is msg.logout logout) {
-				Log( $"logout: {logout.player_id}" );
+				log.info( $"logout: {logout.player_id}" );
 
-			// if (msg is msg.SendToAll sendToALl) {
-			// }
+				// if (msg is msg.SendToAll sendToALl) {
+				// }
 
-			// if (msg is msg.SendToTarget sendToTarget) {
-			// }
+				// if (msg is msg.SendToTarget sendToTarget) {
+				// }
+			}
 
 			// If we have no clue how to handle something, we
 			// just print it out to the console
-			Log( $"RECEIVED UNHANDLED: '{msg.GetType().Name}': {msg}" );
-		}
+			log.warn( $"RECEIVED UNHANDLED: '{msg.GetType().Name}': {msg}" );
 
-		void Log( string text ) => log.info( text );
+		}
 
 		void Send( object obj ) => _sendCeras.WriteToStream( _netStream, obj );
 	}
 
-
 	static class Server {
 		public static int port = 7887;
 
-		public static ImmutableList<ServerClient> s_client = ImmutableList<ServerClient>.Empty;
+		//public static ImmutableList<ServerClient> s_client = ImmutableList<ServerClient>.Empty;
 
 		public static void Start() {
 			log.info( "Starting thread." );
@@ -129,6 +125,7 @@ namespace space_with_friends
 			}
 		}
 
-
 	}
+
 }
+

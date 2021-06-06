@@ -8,7 +8,7 @@
 	using System.Collections.Specialized;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
-	using System.Numerics;
+	//using System.Numerics;
 	using static SerializerBinary;
 
 	/// <summary>
@@ -56,15 +56,17 @@
 			_primitiveFormatters.GetOrAddValueRef(typeof(DateTimeOffset)) = new DateTimeOffsetFormatter();
 			_primitiveFormatters.GetOrAddValueRef(typeof(TimeSpan)) = new TimeSpanFormatter();
 			_primitiveFormatters.GetOrAddValueRef(typeof(BitVector32)) = new BitVector32Formatter();
-			_primitiveFormatters.GetOrAddValueRef(typeof(BigInteger)) = new BigIntegerFormatter();
+			//_primitiveFormatters.GetOrAddValueRef(typeof(BigInteger)) = new BigIntegerFormatter();
 
 			_primitiveFormatters.GetOrAddValueRef(typeof(Uri)) = new UriFormatter();
 			_primitiveFormatters.GetOrAddValueRef(typeof(BitArray)) = new BitArrayFormatter();
 
 
 			#if NETFRAMEWORK
+			#if NOT_UNITY
 			_primitiveFormatters.GetOrAddValueRef(typeof(System.Drawing.Color)) = new ColorFormatter();
 			_primitiveFormatters.GetOrAddValueRef(typeof(System.Drawing.Bitmap)) = new BitmapFormatter();
+			#endif
 			#endif
 		}
 
@@ -255,6 +257,7 @@
 			}
 		}
 
+		/*
 		class BigIntegerFormatter : IFormatter<BigInteger>
 		{
 			public void Serialize(ref byte[] buffer, ref int offset, BigInteger value)
@@ -283,5 +286,6 @@
 				value = new BigInteger(bytes);
 			}
 		}
+		*/
 	}
 }

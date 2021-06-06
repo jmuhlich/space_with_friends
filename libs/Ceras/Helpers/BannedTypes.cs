@@ -71,7 +71,9 @@ namespace Ceras.Formatters
 
 
 			Ban(typeof(System.IO.FileSystemInfo), reasonExploit);
+			#if NOT_UNITY
 			Ban(typeof(System.Data.DataSet), reasonExploit);
+			#endif
 			Ban("System.Management.IWbemClassObjectFreeThreaded", reasonExploit);
 
 

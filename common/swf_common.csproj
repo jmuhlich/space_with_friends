@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,5 +43,9 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(OutDir)$(TargetFileName)  &quot;C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\GameData\space_with_friends&quot; /F /Y" />
+  </Target>
 
 </Project>

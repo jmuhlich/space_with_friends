@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\libs\Ceras\Ceras.csproj" />
     <ProjectReference Include="..\common\swf_common.csproj" />
+
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -38,5 +39,9 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+ <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(OutDir)$(TargetFileName)  &quot;C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\GameData\space_with_friends&quot; /F /Y" />
+  </Target>
 
 </Project>

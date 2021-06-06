@@ -35,7 +35,7 @@ namespace space_with_friends {
 					}
 				}
 
-				client.send( new msg.login { player_id = player_id } );
+				client.broadcast( new msg.login { player_id = player_id } );
 			}
 		}
 		public void OnDestroy() {
@@ -43,7 +43,7 @@ namespace space_with_friends {
 
 			if ( client != null ) {
 				utils.Log( "disconnecting" );
-				client.send( new msg.logout { player_id = player_id } );
+				client.broadcast( new msg.logout { player_id = player_id } );
 				client.disconnect();
 				client = null;
 				utils.Log( "disconnected" );

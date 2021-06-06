@@ -8,7 +8,7 @@ namespace Ceras
 	using System.Collections.ObjectModel;
 	using System.Linq.Expressions;
 	using System.Reflection;
-	using System.Runtime.Serialization;
+//	using System.Runtime.Serialization;
 	using Helpers;
 	using Resolvers;
 	using IFormatter = Formatters.IFormatter;
@@ -98,11 +98,13 @@ namespace Ceras
 			var memberInfo = memberConfig.Member;
 
 			// Apply WriteBackOrder
+			/*
 			var dataMemberAttribute = memberInfo.GetCustomAttribute<DataMemberAttribute>();
 			if (dataMemberAttribute != null)
 			{
 				memberConfig.WriteBackOrder = dataMemberAttribute.Order;
 			}
+			*/
 
 
 			// Skip compiler generated

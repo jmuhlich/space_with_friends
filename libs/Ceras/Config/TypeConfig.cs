@@ -9,7 +9,7 @@
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-	using System.Runtime.Serialization;
+	//using System.Runtime.Serialization;
 	using IFormatter = Formatters.IFormatter;
 
 
@@ -180,6 +180,7 @@
 		/// </summary>
 		public bool TryConfigureLikeDataContractSerializer(bool force = false)
 		{
+		#if NOT_UNITY
 			var dataContract = Type.GetCustomAttribute<DataContractAttribute>();
 			if (dataContract == null && !force)
 				return false;
@@ -204,6 +205,8 @@
 			}
 
 			return true;
+		#endif
+			return false;
 		}
 
 
