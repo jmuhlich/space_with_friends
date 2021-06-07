@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
@@ -24,17 +24,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-     <ProjectReference Include="..\libs\Ceras\Ceras.csproj" />
- 
-     <Reference Include="Assembly-CSharp">
+    <ProjectReference Include="..\libs\Ceras\Ceras.csproj" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+
+    <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program - client1\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="RasterPropMonitor">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program - client1\GameData\JSI\RasterPropMonitor\Plugins\RasterPropMonitor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program - client1\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>

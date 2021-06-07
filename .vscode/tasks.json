@@ -89,6 +89,23 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "libs:ceras:publish",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"${workspaceFolder}/libs/Ceras/Ceras.csproj",
+				"/property:GenerateFullPaths=true",
+				"/property:TargetFramework=net45",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }
