@@ -1,0 +1,16 @@
+"Proto" classes appear to represent persistable state to be stored in ConfigNodes for saving.
+
+ProtoCrewMember
+ - No non-proto equivalent. What is the class representing "live" crew members?
+
+ProtoVessel.Load(FlightState st)
+ - Should probably pass HighLogic.CurrentGame.flightState.
+ - Can also take a second Vessel arg, but if null a new Vessel will automatically be created.
+
+Game.AddVessel(ConfigNode protoVesselNode)
+ - Looks like the right high-level function to simply "deserialize" a vessel into the game.
+ - Calls ProtoVessel.Load
+ - Getting the right ConfigNode here seems tricky.
+
+ProtoCrewMember.ChangeName(string newName)
+ - Allows updating name, which I think Andy was having problems with?
